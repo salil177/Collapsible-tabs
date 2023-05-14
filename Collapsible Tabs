@@ -1,0 +1,379 @@
+{%- if section.settings.background != settings.background and section.settings.background != 'rgba(0,0,0,0)' -%}
+  {%- assign blends_with_background = false -%}
+{%- else -%}
+  {%- assign blends_with_background = true -%}
+{%- endif -%}
+
+
+<style>
+  #shopify-section-{{ section.id }} {
+    {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+      {%- assign section_background = settings.background -%}
+    {%- else -%}
+      {%- assign section_background = section.settings.background -%}
+    {%- endif -%}
+
+    {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+      {%- assign heading_color = settings.heading_color -%}
+      {%- assign text_color = settings.text_color -%}
+    {%- else -%}
+      {%- assign heading_color = section.settings.text_color -%}
+      {%- assign text_color = section.settings.text_color -%}
+    {%- endif -%}
+
+    {%- if section.settings.button_background == 'rgba(0,0,0,0)' -%}
+      {%- assign button_background = settings.primary_button_background -%}
+    {%- else -%}
+      {%- assign button_background = section.settings.button_background -%}
+    {%- endif -%}
+
+    {%- if section.settings.button_text_color == 'rgba(0,0,0,0)' -%}
+      {%- assign button_text_color = settings.primary_button_text_color -%}
+    {%- else -%}
+      {%- assign button_text_color = section.settings.button_text_color -%}
+    {%- endif -%}
+
+    --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+    --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+    --primary-button-background: {{ button_background.red }}, {{ button_background.green }}, {{ button_background.blue }};
+    --primary-button-text-color: {{ button_text_color.red }}, {{ button_text_color.green }}, {{ button_text_color.blue }};
+
+    --prev-next-button-background: {{ settings.background.red }}, {{ settings.background.green }}, {{ settings.background.blue }};
+    --prev-next-button-color: {{ settings.text_color.red }}, {{ settings.text_color.green }}, {{ settings.text_color.blue }};
+
+    --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+    --section-logo-background: {{ section.settings.logo_background.red }} {{ section.settings.logo_background.green }} {{ section.settings.logo_background.blue }} / {{ section.settings.logo_background.alpha }};
+    --section-logo-count: {{ section.blocks.size | default: 6 }};
+  }
+
+  .acc-ul {
+  margin: 0;
+  padding: 0;
+}
+
+.acc-li {
+  list-style: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  transition: all .25s ease;
+}
+.accordian {
+  width: 100%;
+  box-shadow: 0 1px 5px rgba(0,0,0,.10);
+  margin: 5% auto;
+
+}
+
+.accordian .title {
+  background-color: #fff;
+  padding: 1rem;
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  font-weight: 300;
+  transition: all .25s ease;
+      display: flex;
+    align-items: center;
+    justify-content: space-between;
+  &:hover {
+    background-color: rgba(0, 0, 0, .005);
+  }
+}
+
+.accordian ul li:last-child .title {
+  border-bottom: 0;
+}
+
+.accordian ul ul li a {
+  display: block;
+  background-color: #eee;
+  padding: 1rem;
+  color: #777;
+  border-bottom: 1px solid rgba(0, 0, 0, .05);
+  &:hover {
+    background-color: #55acee;
+    color: #fff;
+  }
+}
+
+.open {
+  transform: rotate(180deg);
+  transition: all 1s ease;
+}
+
+.accordian ul ul li:last-child a {
+  border-bottom: 0;
+}
+
+.fa {
+  transition: all .25s ease;
+  float: right;
+}
+
+.accordian h3 {
+  cursor: pointer;
+}
+
+      .acc-inner-div{
+        display:none;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+      }
+
+      .acc-link-img{
+        width: 20px;
+    cursor: pointer;
+    height: 20px;
+    margin: 0 0 0 19px;
+      }
+
+      .content_help {
+    display: flex;
+    margin-top:10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+</style>
+
+<section class="section {% unless blends_with_background or is_boxed %}section--flush{% endunless %}">
+  <div class="section__color-wrapper">
+    <div class="container {% unless blends_with_background %}vertical-breather{% endunless %}">
+
+
+        <div class="accordian">
+      {% for block in section.blocks %}
+        {% case block.type %}
+        <ul class="acc-ul">
+          <li class="acc-li">
+
+            {% when "description" %}
+              
+            <h3 class="title">
+           {{ block.settings.tabs-title }}
+          <span class="fa fa-plus">
+                <svg focusable="false" width="12" height="8" class="icon icon--chevron   " viewBox="0 0 12 8">
+                    <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2"></path>
+                  </svg>
+            </span>
+             
+            </h3>
+            <div class="acc-inner-div acc-inner-desc">
+         <div class="acc-inner-inner">
+           
+             {{ product.description }}
+            
+           </div>
+            </div>
+
+
+             {% when "delivery" %}
+
+               <h3 class="title">
+           {{ block.settings.tabs-title-delivery }}
+          <span class="fa fa-plus">
+                <svg focusable="false" width="12" height="8" class="icon icon--chevron   " viewBox="0 0 12 8">
+                    <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2"></path>
+                  </svg>
+            </span>
+             
+            </h3>
+            <div class="acc-inner-div">
+         <div class="acc-inner-inner">
+           
+             <p>  {{ block.settings.para1 }} {% if block.settings.para1 != blank %}<img class="acc-link-img" src="https://cdn.shopify.com/s/files/1/0741/4572/6744/files/new-window.webp?v=1684065688"/> {% endif %} </p>
+             <li> {{ block.settings.li1 }}</li>
+            <li> {{ block.settings.li2 }} </li>
+
+            <p>  {{ block.settings.para2 }}  {% if block.settings.para2 != blank %}<img class="acc-link-img" src="https://cdn.shopify.com/s/files/1/0741/4572/6744/files/new-window.webp?v=1684065688"/> {% endif %} </p>
+             <li> {{ block.settings.li3 }}</li>
+            <li> {{ block.settings.li4 }} </li>
+            
+           </div>
+            </div>
+
+
+            {% when "help" %}
+
+                   <h3 class="title">
+           {{ block.settings.tabs-title-help }}
+          <span class="fa fa-plus">
+                <svg focusable="false" width="12" height="8" class="icon icon--chevron   " viewBox="0 0 12 8">
+                    <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2"></path>
+                  </svg>
+            </span>
+             
+            </h3>
+            <div class="acc-inner-div">
+         <div class="acc-inner-inner">
+           {{ block.settings.help-body }}
+
+           <div class="content_help">
+        <div class="mai_help"><a href="mailto:Orders@shopmulmul.com"><img style="
+                width: 33px;
+                vertical-align: middle;
+                margin: 8px;
+            " src="https://cdn.shopify.com/s/files/1/0088/4031/4931/files/2989993.png?v=1682341717">Email Us</a>
+        </div>
+        <div class="mai_help"><a href="tel:+919810220059"><img style="width: 30px;
+                vertical-align: middle;
+                margin: 10px;" src="https://cdn.shopify.com/s/files/1/0088/4031/4931/files/phone-512.webp?v=1682341781">Call
+            Us</a></div>
+            <div class="mai_help"><a href="https://api.whatsapp.com/send?phone=+919810220059"><img style="width: 30px;
+              vertical-align: middle;
+              margin: 10px;" src="https://cdn.shopify.com/s/files/1/0088/4031/4931/files/free-whatsapp-icon-121-thumb.png?v=1683104811">Whats App</a></div>
+      </div>
+            
+           </div>
+            </div>
+            
+
+              {% endcase %}
+          </li>
+        </ul>
+        {% endfor %}
+      </div>
+ 
+
+    </div>
+  </div>
+</section>
+
+      <script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const accordianHeaders = document.querySelectorAll('.accordian h3');
+
+  // first tab is open by default
+
+  const Desc = document.querySelector('.acc-inner-desc');
+
+  Desc.style.display = "block";
+  
+  accordianHeaders.forEach(function(accordianHeader) {
+    accordianHeader.addEventListener('click', function(e) {
+      const plusIcon = e.target.querySelector('.fa.fa-plus');
+      
+      if (plusIcon) {
+        plusIcon.classList.toggle('open');
+      }
+      
+      const siblingUl = this.nextElementSibling;
+      const allUl = document.querySelectorAll('.acc-inner-div');
+      console.log(allUl , siblingUl);
+      
+      if (siblingUl.style.display === 'block') {
+        siblingUl.style.display = 'none';
+      } else {
+        siblingUl.style.display = 'block';
+      }
+    });
+  });
+});
+
+      </script>
+
+      {% schema %}
+{
+  "name": "Tabs",
+  "settings": [
+
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    }
+
+  ],
+  "blocks": [
+    {
+      "name": "delivery",
+      "type": "delivery",
+      "settings": [
+      {
+      "type": "text",
+      "id": "tabs-title-delivery",
+      "label": "Title"
+        },
+        {
+      "type": "text",
+      "id": "para1",
+      "label": "Para 1"
+        },
+
+        {
+      "type": "text",
+      "id": "li1",
+      "label": "List 1"
+        },
+          {
+      "type": "text",
+      "id": "li2",
+      "label": "List 2"
+        },
+         {
+      "type": "text",
+      "id": "para2",
+      "label": "Para 2"
+        },
+          {
+      "type": "text",
+      "id": "li3",
+      "label": "List 3"
+        },
+          {
+      "type": "text",
+      "id": "li4",
+      "label": "List 4"
+        }
+
+      ]
+    },
+     {
+      "name": "description",
+      "type": "description",
+      "settings": [
+
+            {
+      "type": "text",
+      "id": "tabs-title",
+      "label": "Title"
+        }
+
+  ]
+     },
+         {
+      "name": "help",
+      "type": "help",
+      "settings": [
+
+            {
+      "type": "text",
+      "id": "tabs-title-help",
+      "label": "Title"
+        },
+            {
+      "type": "text",
+      "id": "help-body",
+      "label": "Text"
+        }
+
+  ]
+     }
+
+  ],
+  "presets": [
+    {
+      "name": "Tabs",
+      "blocks": [
+
+      ]
+    }
+  ]
+}
+{% endschema %}
